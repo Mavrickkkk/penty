@@ -1,0 +1,14 @@
+// views/index.pug
+doctype html
+html
+  head
+    title= title
+  body
+    h1= title
+
+    // Inclure une image directement depuis le répertoire public/images
+
+
+    each dessin in dessins
+      img(src=`/images/${dessin.picPath}`, alt='Image du dessin')
+      p #{dessin.picPath}
