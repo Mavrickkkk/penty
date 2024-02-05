@@ -1,14 +1,26 @@
-// views/index.pug
 doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/style/style.css')
   body
-    h1= title
+    .navbar
+      button#play-button Jouer
+      h1 Penty.
+      div.nav-icons
+        a(href='/login')
+          img.connect(src="/images/connect.png", alt="se connecter")
+        a(href='/messages')
+          img.message(src="/images/message.png", alt="message")
 
-    // Inclure une image directement depuis le répertoire public/images
 
+
+    div.homepic-div
+      img.homepic-class(src="/images/home.jpg", alt="image d'accueil")
 
     each dessin in dessins
-      img(src=`/images/${dessin.picPath}`, alt='Image du dessin')
+      img.image-class(src=`/images/${dessin.picPath}`, alt='Image du dessin')
       p #{dessin.picPath}
+
+    if username
+      h1 Bienvenue, #{username}!

@@ -1,0 +1,77 @@
+@font-face {
+  font-family: "nimbus";
+  src: url(../font/nimbus.otf);
+}
+
+body {
+  font-family: nimbus, sans-serif;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.navbar {
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    color: black;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#play-button {
+    background-color: #82D9F8;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    font-family: nimbus, sans-serif;
+    font-size: 130%;
+}
+
+.nav-icons a {
+    color: black;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 130%;
+}
+
+h1 {
+    margin: 0;
+}
+
+.homepic-div {
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.homepic-class {
+    border-radius: 30px;
+    width: 80vw;
+    height: auto;
+}
+
+.image-class {
+    border-radius: 30px;
+    width: 80vw;
+    height: auto;
+}
+
+.connect {
+    width: auto;
+    height: 20px;
+}
+
+.message {
+    width: auto;
+    height: 20px;
+}
