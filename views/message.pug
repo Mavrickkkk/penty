@@ -1,0 +1,77 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/style/styleMessage.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+    body
+        .conversationList
+            div.menuContainer
+                a.menu(href="/") Menu
+            each conversation in conversations
+                div.convContainer
+                    if (otherUser === conversation.joueur)
+                        a.name.choose(href=`/message/${conversation.joueur}`) #{conversation.joueur}
+                    else
+                        a.name(href=`/message/${conversation.joueur}`) #{conversation.joueur}
+        .messageContainer
+            .messageWindow(id='messageWindow')
+                each message in messages
+                    if message.joueur1 === username
+                        .sentMessage
+                            a #{message.message}
+                            - const dateTime = new Date(message.date);
+                            span.heure= `${dateTime.getDate()}/${dateTime.getMonth() + 1} ${dateTime.getHours()}:${dateTime.getMinutes() < 10 ? '0' : ''}${dateTime.getMinutes()}`
+                    else
+                        .receivedMessage
+                            a #{message.message}
+                            - const dateTime = new Date(message.date);
+                            span.heure= `${dateTime.getDate()}/${dateTime.getMonth() + 1} ${dateTime.getHours()}:${dateTime.getMinutes() < 10 ? '0' : ''}${dateTime.getMinutes()}`
+
+            // Formulaire pour ajouter un nouveau message
+            form(id='messageForm')
+                input#message.inputMessage(type='text', name='message', placeholder='Écrire...')
+                button.sendMessage(type='submit') envoyer
+        script.
+            document.addEventListener('DOMContentLoaded', () => {
+                // Récupérer la fenêtre des messages
+                const socket = io(); // Connecter au serveur Socket.io
+                const messageWindow = document.getElementById('messageWindow');
+                const username = "#{username}";
+                const otherUser = "#{otherUser}";
+                const messageForm = document.getElementById('messageForm');
+                const message = document.getElementById('message');
+
+                // Faire défiler la fenêtre des messages vers le bas
+                messageWindow.scrollTop = messageWindow.scrollHeight;
+
+                if (messageForm && message) {
+                    messageForm.addEventListener('submit', (event) => {
+                        event.preventDefault();
+                        const messageContent = message.value;
+                        const data = {message: messageContent, joueur1: username, joueur2: otherUser};
+                        socket.emit('newMessage', data);
+                        message.value = '';
+                    });
+                } else {
+                    console.error('Le formulaire ou le champ d\'entrée est introuvable.');
+                }
+
+                // Écouter les nouveaux messages reçus
+                socket.on('messageReceived', (data) => {
+                    // Manipuler l'affichage du nouveau message dans la fenêtre des messages
+                    const newMessage = document.createElement('div');
+                    if (data.joueur1 === username) {
+                        newMessage.className = 'sentMessage';
+                    } else {
+                        newMessage.className = 'receivedMessage';
+                    }
+                    newMessage.innerHTML = `
+                        <a>${data.message}</a>
+                        <span class="heure">${new Date(data.date).getHours()}:${new Date(data.date).getMinutes()}</span>
+                    `;
+                    messageWindow.appendChild(newMessage);
+                    messageWindow.scrollTop = messageWindow.scrollHeight;
+                });
+            });

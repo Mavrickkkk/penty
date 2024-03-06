@@ -1,0 +1,37 @@
+doctype html
+html
+    head
+        title Jeu de Dessin
+        link(rel='stylesheet', href='/style/styleJeu.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+    body
+        div.logo-container
+            img.logo(src='/images/logo.png')
+        div.mot-container
+            a.mot #{mot}
+        div.centered-container
+
+            div#timer-container
+                div#timer
+                    span#countdown
+            div#drawingArea
+                canvas(id='canvas', width='700', height='500')
+                div#colorPalette
+                    button(style='background-color: red;')
+                    button(style='background-color: #001F3F;')
+                    button(style='background-color: #87CEEB;')
+                    button(style='background-color: #00FF00;')
+                    button(style='background-color: #008000;')
+                    button(style='background-color: #800080;')
+                    button(style='background-color: #FFA500;')
+                    button(style='background-color: #FF69B4;')
+                    button(style='background-color: #000000;')
+                    button(style='background-color: #8B4513;')
+                    button(style='background-color: #FFFF00;')
+                    button(id='eraserButton', style='background-color: #FFFFFF;')
+                div#sizeControl
+                    input(id='brushSize', type='range', min='1', max='20', value='5')
+            script(src='/js/scriptJeu.js')
+
+        div.bottom
+            a.quitter(href="/") quitter

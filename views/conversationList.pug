@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/style/styleListConv.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+    body
+        nav.navbar
+            div.left
+                a.buttonBW(href = '/') Menu
+            div.center
+                a.title Penty.
+            div.right
+                if username
+                    a.buttonBW(href=`/compte/${username}`) #{name}
+                else
+                    a.blackText(href = '/login') Se connecter
+                    a.buttonBW(href = '/register') S'inscrire
+        div.marginTop.marginLeft
+            a.message Mes messages
+        each conversation in conversations
+            div.convContainer
+                a.conversationLink(href=`/message/${conversation.joueur}`)
+                    div.nameContainer
+                        div.name #{conversation.joueur}
+                    div.lastMessage #{conversation.last_message}

@@ -2,6 +2,7 @@
 const express = require('express');
 const connection = require("../database");
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 // Affiche la page de connexion
 router.get('/login', (req, res) => {
@@ -12,10 +13,11 @@ router.post('/searchUser', (req, res) => {
     const { username, password } = req.body; // Accès aux champs du formulaire
 
     // Rechercher l'utilisateur dans la table 'utilisateur'
-    const sql = 'SELECT * FROM utilisateur WHERE username = ? AND password = ?';
-    connection.query(sql, [username, password], async (err, result) => {
+    const sql = 'SELECT * FROM utilisateur WHERE username = ?';
+    connection.query(sql, [username], async (err, result) => {
         if (err) {
             console.error('Erreur lors de la recherche de l\'utilisateur :', err);
+            console.log({password});
             res.status(500).send('Erreur serveur');
             return;
         }

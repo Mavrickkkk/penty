@@ -8,9 +8,17 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/submitUser', async (req, res) => {
-    const { username, name, password } = req.body;
+    let { username, name, password } = req.body;
 
     try {
+        // Valider l'username pour qu'il ne contienne que des lettres
+        if (!/^[a-zA-Z]+$/.test(username)) {
+            throw new Error('L\'username ne doit contenir que des lettres (a à z).');
+        }
+
+        // Convertir l'username en minuscules
+        username = username.toLowerCase();
+
         // Hasher le mot de passe avec bcrypt
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -37,7 +45,7 @@ router.post('/submitUser', async (req, res) => {
         res.redirect('/');
     } catch (error) {
         console.error('Erreur lors de l\'hachage du mot de passe ou de l\'insertion de l\'utilisateur :', error);
-        res.status(500).send('Erreur serveur');
+        res.status(500).send(error.message);
     }
 });
 

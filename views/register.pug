@@ -3,18 +3,27 @@ html
     head
         title= title
         link(rel='stylesheet', href='/style/styleConnect.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
     body
-        div.container
-            a(href='/')
-                img.pic(src="images/logo.png")
-
+        div.top
+            a.name Penty.
+        div.topLeft
+            a.menu(href='/') menu
+        div.center
             div.form
+                a.name Heureux de vous rencontrer.
+                br
+                a.subText veuillez remplir les informations ci dessous
+                div.espace
                 form(action='/submitUser', method='post')
-                    label.label(for='username') Nom d'utilisateur :
+                    label.label(for='username') Identifiant :
+                    a.subText.margin-left doit être unique
                     input.input(type='text', id='username', name='username', required)
                     label.label(for='name') Nom :
                     input.input(type='text', id='name', name='name', required)
                     label.label(for='password') Mot de passe :
-                    input.input(type='text', id='password', name='password', required)
-                    button.submit(type='submit') Envoyer
-                    a.other(href='/login') j'ai déjà un compte
+                    input.input(type='password', id='password', name='password', required)
+                    div.center
+                        button.submit(type='submit') Envoyer
+                    div.center.margin-top
+                        a.subText(href='/login') j'ai déjà un compte

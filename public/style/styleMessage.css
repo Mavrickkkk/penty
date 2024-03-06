@@ -1,0 +1,194 @@
+@font-face {
+    font-family: "nimbus";
+    src: url(../font/nimbus.otf);
+}
+
+@font-face {
+    font-family: "nohemi";
+    src: url(../font/nohemiel.ttf);
+}
+
+body {
+    display: flex;
+}
+
+a {
+    font-family: nimbus, sans-serif;
+}
+
+.titre {
+    font-size: 300%;
+    display: block;
+}
+
+.titreCentered {
+    font-size: 300%;
+    display: block;
+    text-align: center;
+}
+
+.info {
+    font-size: 150%;
+}
+
+.conversationList {
+    width: 20vw;
+    margin-bottom: 50px;
+}
+
+.messageContainer {
+    width: 60vw;
+    margin-bottom: 50px;
+    margin-left: 10vw;
+}
+
+.messageContainer h1 {
+    background-color: white;
+}
+
+.messageWindow {
+    height: calc(75vh); /* Hauteur de la fenêtre des messages moins la hauteur de l'entrée de texte et de son marge */
+    overflow-y: auto; /* Permet le défilement vertical si les messages dépassent la hauteur */
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 20px; /* Ajoutez une marge en bas pour l'entrée de texte */
+}
+
+.messageWindow::-webkit-scrollbar {
+    display: none; /* Pour les navigateurs basés sur WebKit/Blink (Chrome, Safari, Opera, etc.) */
+}
+
+.messageWindow a {
+    display: block; /* Affiche chaque message sur une ligne */
+    margin-bottom: 30px; /* Marge entre les messages */
+}
+
+.messageWindow a {
+    margin: 30px; /* Supprime la marge par défaut pour les éléments de paragraphe */
+}
+
+.sentMessage {
+    text-align: right; /* Aligne les messages envoyés à droite */
+}
+
+.receivedMessage {
+    text-align: left; /* Aligne les messages reçus à gauche */
+}
+
+.sentMessage a {
+    background-color: #0F0F0F;
+    border-radius: 30px;
+    padding: 5px 25px;
+    color: white;
+}
+
+.receivedMessage a {
+    background-color: #DBDBDB;
+    border-radius: 30px;
+    color: black;
+}
+
+.sentMessage a,
+.receivedMessage a {
+    padding: 5px 15px; /* Espacement intérieur des messages */
+    margin: 5px; /* Marge autour des messages */
+    display: inline-block; /* Affichage en ligne pour les messages */
+}
+
+.sentMessage span,
+.receivedMessage span {
+    display: block; /* Affichage en bloc pour les éléments de temps */
+    font-size: 12px; /* Taille de la police pour l'élément de temps */
+    color: #666; /* Couleur de la police pour l'élément de temps */
+}
+
+.convContainer {
+    margin-bottom: 50px;
+    margin-top: 50px;
+    display: flex;
+    width: 90%;
+    justify-content: center;
+}
+
+.name {
+    text-decoration: none;
+    display: block;
+    font-size: 130%;
+    background-color: #1C66F9;
+    color: white;
+    text-align: center;
+    padding: 5px 15px;
+    border-radius: 30px;
+}
+
+.name:hover {
+    background-color: white;
+    color: #1C66F9;
+    border: 1px solid #1C66F9;
+}
+
+.choose {
+    background-color: white;
+    color: #1C66F9;
+    border: 1px solid #1C66F9;
+}
+
+.menuContainer {
+    margin-bottom: 100px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.menu {
+    text-decoration: none;
+    font-size: 130%;
+    border-radius: 30px;
+    background-color: #0F0F0F;
+    color: white;
+    text-align: center;
+    padding: 5px 30px;
+}
+
+.menu:hover {
+    background-color: #3b3b3b;
+}
+
+.heure {
+    font-family: nohemi;
+}
+
+.inputMessage {
+    height: 50px;
+    width: 40vw;
+    margin-bottom: 20px;
+    border: none;
+    color: #3b3b3b;
+    border-radius: 30px;
+    font-size: 130%;
+    font-family: nimbus, sans-serif;
+    text-align: left;
+    outline: none;
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+    padding: 5px 25px;
+}
+
+.sendMessage {
+    padding: 5px 25px;
+    border-radius: 30px;
+    background-color: #0F0F0F;
+    color: white;
+    border: none;
+    font-family: nimbus, sans-serif;
+    margin-left: 20px;
+    font-size: 130%;
+}
+
+.sendMessage:hover {
+    background-color: transparent;
+    color: black;
+}
+
+.send {
+    width: 30px;
+    border: none;
+}

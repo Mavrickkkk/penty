@@ -3,16 +3,24 @@ html
     head
         title= title
         link(rel='stylesheet', href='/style/styleConnect.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
     body
-        div.container
-            a(href='/')
-                img.pic(src="images/logo.png")
-
+        div.top
+            a.name Penty.
+        div.topLeft
+            a.menu(href='/') menu
+        div.center
             div.form
-                form(action='/submitUser', method='post')
-                    label.label(for='username') Nom d'utilisateur :
+                a.name Enfin, on se retrouve.
+                br
+                a.subText veuillez remplir les informations ci dessous
+                div.espace
+                form(action='/searchUser', method='post')
+                    label.label(for='username') Identifiant :
                     input.input(type='text', id='username', name='username', required)
-                    label.label(for='name') Nom :
-                    input.input(type='text', id='name', name='name', required)
-                    button.submit(type='submit') Envoyer
-                    a.other(href='/register') je suis nouveau
+                    label.label(for='password') Mot de passe :
+                    input.input(type='password', id='password', name='password', required)
+                    div.center
+                        button.submit(type='submit') Envoyer
+                    div.center.margin-top
+                        a.subText(href='/register') je suis nouveau

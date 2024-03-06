@@ -1,0 +1,32 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/style/styleParcourir.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+    body
+        nav.navbar
+            div.left
+                a.buttonBW(href = '/') menu
+            div.right
+                if username
+                    a.blackText(href = '/conversationList') Mes messages
+                    a.buttonBW(href=`/compte/${username}`) #{name}
+                else
+                    a.blackText(href = '/login') Se connecter
+                    a.buttonBW(href = '/register') S'inscrire
+
+        a.mainText Parcourir
+
+        div.marginTop
+            if (filtre==='jaime')
+                a.filter.active(href="/parcourir?filtre=jaime") J'aime
+                a.filter(href="/parcourir?filtre=plus-recent") Plus Récent
+            if (filtre==='plus-recent')
+                a.filter(href="/parcourir?filtre=jaime") J'aime
+                a.filter.active(href="/parcourir?filtre=plus-recent") Plus Récent
+
+        div.dessin-container.center
+            each dessin in dessins
+                img.image-class(src=`/dessin/${dessin.picPath}`, alt='Image du dessin')

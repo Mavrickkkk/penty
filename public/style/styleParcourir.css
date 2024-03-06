@@ -1,0 +1,134 @@
+@font-face {
+    font-family: "nimbus";
+    src: url(../font/nimbus.otf);
+}
+
+@font-face {
+    font-family: "nohemi";
+    src: url(../font/nohemiel.ttf);
+}
+
+body {
+    font-family: nimbus, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 50px;
+}
+
+.navbar a {
+    margin: 15px;
+    font-size: 130%;
+}
+
+.buttonBlue {
+    background-color: #1C66F9;
+    padding: 5px 25px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+}
+
+.buttonBlue:hover {
+    background-color: #1651c9;
+}
+
+.blackText {
+    font-family: nimbus, sans-serif;
+    text-decoration: none;
+    color: black;
+}
+
+.buttonWB {
+    background-color: white;
+    padding: 5px 25px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    color: black;
+}
+
+.buttonWB:hover {
+    background-color: #dadada;
+}
+
+.buttonBW {
+    background-color: #0F0F0F;
+    padding: 5px 30px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    font-size: 200%;
+    margin: 70px 0px;
+}
+
+.buttonBW:hover {
+    background-color: #464646;
+}
+
+.mainText {
+    font-family: nimbus, sans-serif;
+    text-decoration: none;
+    font-size: 300%;
+    color: black;
+    margin-left: 15px;
+}
+
+.center {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.dessin-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    animation: moveLeft 10s linear infinite;
+    will-change: transform;
+}
+
+.image-class {
+    border-radius: 30px;
+    margin: 20px;
+    width: 30vw;
+    height: auto;
+}
+
+a.filter {
+    font-family: nimbus, sans-serif;
+    font-size: 150%;
+    color: white;
+    background-color: black;
+    padding: 5px 25px;
+    border-radius: 20px;
+    text-decoration: none;
+    margin: 0 10px;
+    border: 1px solid black;
+}
+
+a.filter:hover {
+    color: black;
+    background-color: white;
+}
+
+a.filter.active {
+    color: black;
+    background-color: white;
+}
+
+.marginTop {
+    margin: 30px 0;
+}

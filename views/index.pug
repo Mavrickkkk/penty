@@ -3,24 +3,96 @@ html
   head
     title= title
     link(rel='stylesheet', href='/style/style.css')
+    link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
   body
-    .navbar
-      button#play-button Jouer
-      h1 Penty.
-      div.nav-icons
-        a(href='/login')
-          img.connect(src="/images/connect.png", alt="se connecter")
-        a(href='/messages')
-          img.message(src="/images/message.png", alt="message")
+    script.
+      document.addEventListener('DOMContentLoaded', () => {
+        const socket = io(); // Connecter au serveur Socket.io
 
+        socket.on('connect', () => {
+          console.log('Connecté au serveur Socket.io');
+        });
 
+        socket.on('message', (data) => {
+          console.log('Message reçu du serveur :', data);
+        });
+
+        // Ajout d'un gestionnaire d'événements pour le formulaire
+        const nameForm = document.getElementById('nameForm');
+        const usernameInput = document.getElementById('username');
+
+        if (nameForm && usernameInput) {
+          nameForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
+            const username = usernameInput.value;
+            socket.emit('newUser', username); // Envoyer l'username au serveur
+            usernameInput.value = ''; // Effacer le champ après l'envoi
+          });
+        } else {
+          console.error('Le formulaire ou le champ d\'entrée est introuvable.');
+        }
+
+        // Écouter l'événement 'welcome' du serveur
+        socket.on('welcome', (message) => {
+          console.log('Message de bienvenue reçu du serveur :', message);
+        });
+      });
+    .background
+      nav.navbar
+        div.left
+          a.buttonBlue(href = '/jeu') Jouer
+        div.right
+          if username
+            a.buttonWB(href = '/conversationList') Mes messages
+            a.buttonBW(href=`/compte/${username}`) #{name}
+          else
+            a.whiteText(href = '/login') Se connecter
+            a.buttonWB(href = '/register') S'inscrire
+      div.center
+        a.title Penty.
+      div.center
+        a.subtitle 2 mots, 2 personnes, 3 minutes, 2 dessins
 
     div.homepic-div
-      img.homepic-class(src="/images/home.jpg", alt="image d'accueil")
+      img.homepic-class(src="/images/homepic.png", alt="image d'accueil")
 
-    each dessin in dessins
-      img.image-class(src=`/images/${dessin.picPath}`, alt='Image du dessin')
-      p #{dessin.picPath}
+    a.mainText Le meilleur de Penty.
+    a.subText selon vous
 
-    if username
-      h1 Bienvenue, #{username}!
+    div.dessin-container
+      each dessin in dessins
+        img.image-class.animated-drawing(src=`/dessin/${dessin.picPath}`, alt='Image du dessin')
+
+    div.center
+      a.buttonBW(href="/parcourir") voir plus
+
+    div.center
+      a(href="/regles")
+        img.rulesPic(src="/images/regles.jpg")
+
+    // Formulaire pour l'username
+    //form#nameForm
+    //  input#username(type='text', placeholder='Votre nom')
+    //  button(type='submit') Envoyer
+
+    script.
+      document.addEventListener('DOMContentLoaded', () => {
+        const dessinContainer = document.querySelector('.dessin-container');
+        const images = document.querySelectorAll('.animated-drawing');
+
+        images.forEach((image) => {
+          const clone = image.cloneNode(true);
+          dessinContainer.appendChild(clone);
+        });
+
+        dessinContainer.addEventListener('animationiteration', () => {
+          const firstImage = dessinContainer.querySelector('.animated-drawing');
+          dessinContainer.appendChild(firstImage);
+          dessinContainer.style.transition = "none";
+          dessinContainer.style.transform = "translateX(0)";
+          requestAnimationFrame(() => {
+            dessinContainer.style.transition = "";
+          });
+        });
+      });

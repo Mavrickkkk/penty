@@ -1,0 +1,124 @@
+@font-face {
+    font-family: "nimbus";
+    src: url(../font/nimbus.otf);
+}
+
+a{
+    font-family: nimbus, sans-serif;
+    color: black;
+    text-decoration: none;
+
+}
+
+body {
+    font-family: nimbus, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.buttonBlue {
+    background-color: #1C66F9;
+    padding: 5px 25px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 130%;
+    color: white;
+}
+
+.buttonBlue:hover {
+    background-color: white;
+    color: #1C66F9;
+    border: 1px solid #1C66F9;
+}
+
+.blackText {
+    font-family: nimbus, sans-serif;
+    text-decoration: none;
+    color: black;
+    font-size: 130%;
+    margin-right: 10px;
+}
+
+.buttonBW {
+    background-color: #0F0F0F;
+    padding: 5px 30px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    font-size: 130%;
+    margin: 70px 0px;
+}
+
+.buttonBW:hover {
+    background-color: #464646;
+}
+
+.topCentered {
+    display: flex;
+    justify-content: center;
+}
+
+.title {
+    font-family: nimbus, sans-serif;
+    font-size: 250%;
+}
+
+.marginTop {
+    margin-top: 75px;
+}
+
+.marginLeft {
+    margin-left: 50px;
+}
+
+.message {
+    font-family: nimbus, sans-serif;
+    font-size: 250%;
+}
+
+.convContainer {
+    margin-bottom: 50px;
+    margin-top: 50px;
+    margin-left: 150px;
+}
+
+.conversationLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.nameContainer {
+    background-color: #1C66F9;
+    padding: 5px 20px;
+    margin-right: 10px;
+    border-radius: 30px;
+    color: white;
+}
+
+.nameContainer:hover {
+    background-color: white;
+    color: #1C66F9;
+    border: 1px solid #1C66F9;
+}
+
+.name {
+    font-size: 150%;
+}
+
+.lastMessage {
+    font-size: 130%;
+}
