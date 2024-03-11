@@ -81,6 +81,7 @@ const message = require('./routes/message.js');
 const regles = require('./routes/regles.js');
 const parcourir = require('./routes/parcourir.js');
 const compte = require('./routes/compte.js');
+const dessin = require('./routes/dessin.js');
 
 app.use(index);
 app.use(login);
@@ -90,6 +91,7 @@ app.use(message);
 app.use(regles);
 app.use(parcourir);
 app.use(compte);
+app.use(dessin);
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
