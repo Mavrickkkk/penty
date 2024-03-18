@@ -28,5 +28,4 @@ function testConnection() {
         console.log('Test de connexion réussi. Résultat :', result[0].solution);
     });
 }
-
 module.exports = connection;

@@ -70,8 +70,24 @@ html
                         });
                     }
                 });
-            });
 
+
+            });
+            function deleteDessin() {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce dessin ?')) {
+                    $.ajax({
+            type: 'DELETE',
+                url: '/dessin/' + #{dessin.id},
+                cache: false,
+                success: function (result) {
+                window.location.href = '/';
+                },
+                error: function (err) {
+                console.error(err);
+                },
+                });
+            }
+            }
 
     body
         .center.marginTop
@@ -82,3 +98,5 @@ html
             a#like-button.buttonRed.margin j'aime #{nombreLikes}
             a.buttonBW.margin(href=`/compte/${usernameJoueur1}`)=nomJoueur1
             a.buttonBW.margin(href=`/compte/${usernameJoueur2}`)=nomJoueur2
+            if type === 2
+                button.buttonRed.margin(type='button', onclick='deleteDessin()') Supprimer

@@ -24,6 +24,7 @@ router.post('/searchUser', (req, res) => {
 
         if (result.length > 0) {
             const hashedPassword = result[0].password;
+            const type = result[0].type;
 
             // Comparer les mots de passe hachés avec bcrypt
             const passwordMatch = await bcrypt.compare(password, hashedPassword);
@@ -31,6 +32,7 @@ router.post('/searchUser', (req, res) => {
             if (passwordMatch) {
                 console.log('Connexion réussie pour l\'utilisateur :', {username});
                 req.session.username = username;
+                req.session.type = type;
                 res.redirect('/'); // Redirection vers la page d'accueil
             } else {
                 console.log('Mot de passe incorrect pour l\'utilisateur :', {username});

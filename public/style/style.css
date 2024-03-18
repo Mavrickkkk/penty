@@ -200,6 +200,7 @@ body {
     color: white;
     font-size: 200%;
     cursor: pointer;
+    border: none;
 }
 
 .buttonRed:hover {

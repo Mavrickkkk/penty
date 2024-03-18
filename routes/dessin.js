@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../database');
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+
 
 router.get('/dessin/:id', (req, res) => {
     const id = req.params.id;
@@ -62,6 +66,7 @@ router.get('/dessin/:id', (req, res) => {
                     title: 'Penty.',
                     dessin: dessin,
                     username: username,
+                    type: req.session.type,
                     nomJoueur1: nomJoueur1,
                     usernameJoueur1: usernameJoueur1,
                     nomJoueur2: nomJoueur2,
@@ -153,5 +158,54 @@ router.delete('/dessin/:id/unlike', (req, res) => {
         res.send('OK');
     });
 });
+
+router.delete('/dessin/:id', (req, res) => {
+    const type = req.session.type;
+    let id = req.params.id;
+
+    if (type !== 2) {
+        res.status(403).send('Vous n\'êtes pas autorisé à supprimer ce dessin');
+        return;
+    }
+
+    // Récupérer le nom de fichier de l'image à supprimer
+    let query = 'SELECT picPath FROM dessin WHERE id = ?';
+    connection.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Erreur lors de la récupération du nom de fichier :', err);
+            res.status(500).send('Erreur serveur');
+            return;
+        }
+
+        if (results.length === 0) {
+            res.status(404).send('Dessin non trouvé');
+            return;
+        }
+
+        const filePath = path.join(__dirname, '..', 'public', 'dessin', results[0].picPath);
+
+        // Supprimer le dessin de la base de données
+        query = 'DELETE FROM dessin WHERE id = ?';
+        connection.query(query, [id], (err, result) => {
+            if (err) {
+                console.error('Erreur lors de la suppression du dessin :', err);
+                res.status(500).send('Erreur serveur');
+                return;
+            }
+
+            // Supprimer le fichier image du système de fichiers
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Erreur lors de la suppression du fichier image :', err);
+                    res.status(500).send('Erreur serveur');
+                    return;
+                }
+
+                res.send('OK');
+            });
+        });
+    });
+});
+
 
 module.exports = router;
