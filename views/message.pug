@@ -31,7 +31,7 @@ html
 
             // Formulaire pour ajouter un nouveau message
             form(id='messageForm')
-                input#message.inputMessage(type='text', name='message', placeholder='Écrire...')
+                input#message.inputMessage(type='text', name='message', placeholder='Écrire...', minlength="1" required)
                 button.sendMessage(type='submit') envoyer
         script.
             document.addEventListener('DOMContentLoaded', () => {

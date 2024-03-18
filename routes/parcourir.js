@@ -10,7 +10,7 @@ router.get('/parcourir', (req, res) => {
     // Récupérer tous les dessins depuis la base de données avec le filtre approprié
     let query = 'SELECT * FROM dessin';
     if (filtre === 'jaime') {
-        query = 'SELECT * FROM dessin ORDER BY likes DESC';
+        query = 'SELECT * FROM dessin';
     } else if (filtre === 'plus-recent') {
         query = 'SELECT * FROM dessin ORDER BY date DESC';
     }

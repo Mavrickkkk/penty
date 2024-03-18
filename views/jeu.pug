@@ -4,19 +4,20 @@ html
         title Jeu de Dessin
         link(rel='stylesheet', href='/style/styleJeu.css')
         link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+        script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+        script(src='/js/scriptJeu.js')
     body
-        div.logo-container
+        .logo-container
             img.logo(src='/images/logo.png')
-        div.mot-container
+        .mot-container
             a.mot #{mot}
-        div.centered-container
-
-            div#timer-container
-                div#timer
-                    span#countdown
-            div#drawingArea
-                canvas(id='canvas', width='700', height='500')
-                div#colorPalette
+        .centered-container
+            #timer-container
+                #timer
+                    #countdown
+            #drawingArea
+                canvas#canvas(width='700', height='500')
+                #colorPalette
                     button(style='background-color: red;')
                     button(style='background-color: #001F3F;')
                     button(style='background-color: #87CEEB;')
@@ -28,10 +29,9 @@ html
                     button(style='background-color: #000000;')
                     button(style='background-color: #8B4513;')
                     button(style='background-color: #FFFF00;')
-                    button(id='eraserButton', style='background-color: #FFFFFF;')
-                div#sizeControl
-                    input(id='brushSize', type='range', min='1', max='20', value='5')
-            script(src='/js/scriptJeu.js')
+                    button#eraserButton(style='background-color: #FFFFFF;')
+                #sizeControl
+                    input#brushSize(type='range', min='1', max='20', value='5')
 
-        div.bottom
+        .bottom
             a.quitter(href="/") quitter

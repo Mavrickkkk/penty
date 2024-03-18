@@ -1,7 +1,39 @@
-// routes/jeu.js
 const express = require('express');
-const connection = require("../database");
 const router = express.Router();
+const connection = require("../database");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = path.join(__dirname, '..', 'public', 'dessin');
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        const now = new Date();
+        const filename = `dessin${now.getTime()}.png`;
+        cb(null, filename);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+router.post('/dessinEnvoie', upload.single('image'), (req, res) => {
+    const idPartie = 1;
+    const imageName = req.file.filename;
+
+    // Enregistrer le nom de l'image dans la base de données
+    connection.query('INSERT INTO dessin (picPath, idPartie, date) VALUES (?, ?, NOW())', [imageName, idPartie], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de l\'enregistrement du dessin :', err);
+            res.status(500).send('Erreur serveur');
+            return;
+        }
+
+        res.redirect('/');
+    });
+});
 
 // Définir la route pour la page de jeu
 router.get('/jeu', (req, res) => {
@@ -17,4 +49,4 @@ router.get('/jeu', (req, res) => {
     });
 });
 
-module.exports = router; // Ne pas oublier cette ligne
+module.exports = router;

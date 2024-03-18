@@ -83,34 +83,6 @@ router.get('/message/:joueur2', (req, res) => {
     });
 });
 
-router.post('/deleteMessage', (req, res) => {
-    const { messageId } = req.body;
-
-    // Vérifiez d'abord si le message existe avant de le supprimer
-    connection.query('SELECT * FROM message WHERE id = ?', [messageId], (err, result) => {
-        if (err) {
-            console.error('Erreur lors de la recherche du message à supprimer :', err);
-            res.status(500).send('Erreur serveur');
-            return;
-        }
-
-        // Si le message existe, procédez à sa suppression
-        if (result.length > 0) {
-            connection.query('DELETE FROM message WHERE id = ?', [messageId], (err, result) => {
-                if (err) {
-                    console.error('Erreur lors de la suppression du message :', err);
-                    res.status(500).send('Erreur serveur');
-                    return;
-                }
-                res.redirect('/message'); // Rediriger vers la page de chat après la suppression du message
-            });
-        } else {
-            console.error('Message non trouvé.');
-            res.status(404).send('Message non trouvé.');
-        }
-    });
-});
-
 // Ajouter un nouveau message à la base de données
 router.post('/submitMessage/:joueur2', (req, res) => {
     const { message } = req.body;

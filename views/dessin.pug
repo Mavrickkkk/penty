@@ -1,20 +1,84 @@
+doctype html
 html
     head
         meta(charset='UTF-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(rel='stylesheet', href='/style/style.css')
+        link(rel='icon', href='/images/favicon.png', type='image/x-icon')
         title= title
+        script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+        script.
+            $(document).ready(function () {
+                let likeButton = $('#like-button');
+                let likes = parseInt(likeButton.text().split(' ')[1]);
+                let liked = false;
+
+                // Vérifier si l'utilisateur a déjà aimé le dessin
+                $.ajax({
+                    type: 'GET',
+                    url: '/dessin/' + #{dessin.id} + '/liked',
+                    cache: false,
+                    success: function (result) {
+                        liked = result;
+                        if (liked) {
+                            likeButton.text('je n\'aime plus ' + likes);
+                        } else {
+                            likeButton.text('j\'aime ' + likes);
+                        }
+                    },
+                    error: function (err) {
+                        console.error(err);
+                    },
+                });
+
+                likeButton.on('click', function (e) {
+                    e.preventDefault();
+
+                    if (!liked) {
+                        // Ajouter un like
+                        $.ajax({
+                            type: 'POST',
+                            url: '/dessin/' + #{dessin.id} + '/like',
+                            cache: false,
+                            success: function (result) {
+                                likes++;
+                                likeButton.text('je n\'aime plus ' + likes);
+                                liked = true;
+                                // Mettre à jour le nombre de likes affiché
+                                $('.nombre-likes').text(likes);
+                            },
+                            error: function (err) {
+                                console.error(err);
+                            },
+                        });
+                    } else {
+                        // Retirer un like
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/dessin/' + #{dessin.id} + '/unlike',
+                            cache: false,
+                            success: function (result) {
+                                likes--;
+                                likeButton.text('j\'aime ' + likes);
+                                liked = false;
+                                // Mettre à jour le nombre de likes affiché
+                                $('.nombre-likes').text(likes);
+                            },
+                            error: function (err) {
+                                console.error(err);
+                            },
+                        });
+                    }
+                });
+            });
+
+
     body
-        .container
-            h1 Dessin
-            img(src=dessin.picPath, alt='Dessin', width='300')
-            p
-                | Nombre de likes :
-                strong= dessin.likes
-            p
-                | Joueur 1 :
-                strong= nomJoueur1
-                strong= usernameJoueur1
-            p
-                | Joueur 2 :
-                strong= nomJoueur2
-                strong= usernameJoueur2
+        .center.marginTop
+            img.dessin(src=dessin.picPath, alt='Dessin')
+        .center.marginTop
+            a.mainText= randomWord
+        .left.margin
+            a#like-button.buttonRed.margin j'aime #{nombreLikes}
+            a.buttonBW.margin(href=`/compte/${usernameJoueur1}`)=nomJoueur1
+            a.buttonBW.margin(href=`/compte/${usernameJoueur2}`)=nomJoueur2

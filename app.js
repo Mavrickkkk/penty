@@ -28,7 +28,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('newMessage', (data) => {
-        console.log('Nouveau message :', data.message);
         const {message, joueur1, joueur2} = data;
         // Insérer un message dans la base de données
         const sql = 'INSERT INTO message (message, joueur1, joueur2, date) VALUES (?, ?, ?, NOW())';
@@ -40,7 +39,7 @@ io.on('connection', (socket) => {
             console.log('Message inséré avec succès dans la base de données.');
             io.emit('messageReceived', {
                 message: data.message,
-                date: new Date().toISOString(), // Vous pouvez ajuster cela selon vos besoins
+                date: new Date().toISOString(),
                 joueur1: data.joueur1,
                 joueur2: data.joueur2
             });

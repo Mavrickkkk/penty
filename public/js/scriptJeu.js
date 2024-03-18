@@ -31,6 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mousemove', draw);
 
+    // Variable pour stocker le délai d'envoi de l'image
+    let sendDelay;
+
+    // Fonction pour démarrer le délai d'envoi de l'image
+    function startSendDelay() {
+        sendDelay = setTimeout(() => {
+            sendDrawing();
+        }, 20000); // Envoyer l'image après 20 secondes
+    }
+
+    // Fonction pour arrêter le délai d'envoi de l'image
+    function stopSendDelay() {
+        clearTimeout(sendDelay);
+    }
+
     // Fonction pour démarrer le dessin
     function startDrawing(e) {
         if (timerValue > 0 || e.buttons !== 1) {
@@ -42,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour arrêter le dessin
     function stopDrawing() {
         drawing = false;
+        stopSendDelay(); // Arrêter le délai d'envoi de l'image actuel
         context.beginPath();
     }
 
@@ -63,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
         context.moveTo(mouseX, mouseY);
     }
 
-
     // Fonction pour démarrer le timer
     function startTimer() {
         countdownInterval = setInterval(() => {
@@ -80,12 +95,46 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(countdownInterval);
     }
 
+    // Fonction pour envoyer le dessin au serveur
+    async function sendDrawing() {
+        console.log("coucou j'y suis enfin");
+        const canvas = document.getElementById('canvas');
+        let blob = await fetch(canvas.toDataURL('image/png')).then(r => r.blob());
+        let file = new File([blob], 'image.png', { type: 'image/png' });
+        const formData = new FormData();
+        formData.append('image', file); // Ajouter les données de l'image au FormData
+
+        // Envoyer une requête AJAX au serveur
+        $.ajax({
+            type: 'POST',
+            url: '/dessinEnvoie',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                // Rediriger l'utilisateur vers une autre page
+                window.location.href = '/';
+            },
+            error: function (error) {
+                console.error('Erreur lors de l\'envoi du dessin :', error);
+            },
+        });
+    }
+
     // Fonction pour mettre à jour l'affichage du timer
     function updateTimerDisplay() {
         const countdownElement = document.getElementById('countdown');
-        countdownElement.textContent = timerValue;
+        countdownElement.textContent = timerValue; // Mettre à jour l'affichage du timer
+
+        // Vérifier si le temps est écoulé
+        if (timerValue === 0) {
+            clearInterval(countdownInterval);
+            stopSendDelay(); // Arrêter le délai d'envoi de l'image actuel
+            sendDrawing(); // Appeler la fonction sendDrawing() lorsque le temps est écoulé
+        }
     }
 
-    // Démarrer le timer lorsque le DOM est chargé
+    // Démarrer le timer et le délai d'envoi de l'image lorsque le DOM est chargé
     startTimer();
+    startSendDelay();
 });

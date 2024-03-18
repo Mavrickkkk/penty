@@ -29,5 +29,5 @@ html
 
         div.dessin-container.center
             each dessin in dessins
-                a(href="/dessin/2")
+                a(href=`/dessin/${dessin.id}`)
                     img.image-class(src=`/dessin/${dessin.picPath}`, alt='Image du dessin')

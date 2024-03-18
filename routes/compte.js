@@ -18,7 +18,7 @@ router.get('/compte/:profile', (req, res) => {
     `;
 
     if (filtre === 'jaime') {
-        query += ' ORDER BY dessin.likes DESC';
+        query += '';
     } else if (filtre === 'plus-recent') {
         query += ' ORDER BY dessin.date DESC';
     }
