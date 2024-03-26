@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    title Penty
+    link(rel='stylesheet', href='../style/styleSalon.css')
+    link(rel='icon', href='/images/favicon.png', type='image/x-icon')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+    script.
+      document.addEventListener('DOMContentLoaded', function () {
+        const createButton = document.getElementById('create-button');
+        const createForm = document.getElementById('create-form');
+
+        createButton.addEventListener('click', function () {
+          createForm.style.display = 'block';
+          });
+      });
+  body
+    div.header
+      a.party-button#create-button Créer une partie
+      div#create-form(style='display: none;') 
+        form(action='/creer', method='POST')
+
+
+          label(for='code') Code :
+          input(type='number', name='code', id='code')
+          input(type='submit', value='Créer')
+
+      div.logo-container
+        img.logo(src='images/logo.png')
+
+    .main-container 
+
+      form(action='/salon', method='GET')
+        input.moteur(type='text', name='query', placeholder='Rechercher...')
+
+      div.parties-container
+        each p in parties
+          .party
+            p
+              span Joueur: #{p.joueur1}
+              form(action='/rejoindre', method='POST')
+                input(type='hidden', name='partieId', value=p.id)
+                if p.mdp
+                  span privée
+                else
+                  span public
+                button(type='submit') Rejoindre
+                // ajouter le code suivant pour émettre un événement socket
+                script.
+                  const io = require('socket.io-client');
+                  const socket = io();
+                  const joinButton = document.querySelector('button[type="submit"]');
+                  joinButton.addEventListener('click', function (event) {
+                    event.preventDefault(); // empêcher le formulaire d'être soumis
+                    const partieId = document.querySelector('input[name="partieId"]').value;
+                    socket.emit('join-party', {partieId: partieId});
+                  });

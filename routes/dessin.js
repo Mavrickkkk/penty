@@ -34,7 +34,7 @@ router.get('/dessin/:id', (req, res) => {
 
         // Récupérer le nom et l'username des joueurs 1 et 2
         let queryJoueurs = `
-      SELECT randomWord, utilisateur.name AS joueur1Name, utilisateur.username AS joueur1Username,
+      SELECT randomWord1, utilisateur.name AS joueur1Name, utilisateur.username AS joueur1Username,
              utilisateur2.name AS joueur2Name, utilisateur2.username AS joueur2Username
       FROM partie
       JOIN utilisateur ON partie.joueur1 = utilisateur.username

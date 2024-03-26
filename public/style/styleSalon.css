@@ -1,0 +1,71 @@
+body {
+    top: 0;
+    left: 0;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+}
+
+.logo-container {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+}
+
+.cadenas {
+    width: 40px;
+    height: auto;
+}
+
+.party-button {
+    text-decoration: none;
+    background-color: #82D9F8;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    font-family: nimbus, sans-serif;
+    font-size: 130%;
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+}
+
+.main-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.moteur {
+    border: none;
+    color: #3b3b3b;
+    border-radius: 8px;
+    font-size: 130%;
+    font-family: nimbus, sans-serif;
+    width: 30vw;
+    text-align: center;
+    outline: none;
+    display: block;
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+    /* Ajoutez cette ligne pour centrer horizontalement */
+}
+
+
+.parties-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.party {
+    width: 50%;
+    /* Pour diviser en deux colonnes */
+    box-sizing: border-box;
+    padding: 10px;
+    display: inline-block;
+}

@@ -46,6 +46,45 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on('joinGame', (gameId, playerId) => {
+        // Vérifier s'il existe déjà une entrée dans la table des parties en cours pour cette partie
+        const sql = 'SELECT * FROM partie WHERE id = ?';
+        connection.query(sql, [gameId], (err, result) => {
+            if (err) {
+                console.error('Erreur lors de la vérification de la partie en cours :', err);
+                return;
+            }
+
+            if (result.length === 0) {
+                // Aucune entrée trouvée, créer une nouvelle entrée avec le joueur actuel en tant que joueur 1
+                const sql = 'INSERT INTO partie (id, joueur1) VALUES (?, ?)';
+                connection.query(sql, [gameId, playerId], (err, result) => {
+                    if (err) {
+                        console.error('Erreur lors de la création de la partie en cours :', err);
+                        return;
+                    }
+                    console.log('Partie en cours créée avec succès.');
+                });
+            } else {
+                // Une entrée trouvée, mettre à jour l'entrée avec le joueur actuel en tant que joueur 2
+                const sql = 'UPDATE partie SET joueur2 = ? WHERE id = ?';
+                connection.query(sql, [playerId, gameId], (err, result) => {
+                    if (err) {
+                        console.error('Erreur lors de la mise à jour de la partie en cours :', err);
+                        return;
+                    }
+                    console.log('Partie en cours mise à jour avec succès.');
+
+                    // Émettre un événement 'gameStart' vers les deux joueurs pour démarrer la partie
+                    const player1Socket = io.sockets.sockets.get(result[0].joueur_1);
+                    const player2Socket = io.sockets.sockets.get(playerId);
+                    player1Socket.emit('gameStart');
+                    player2Socket.emit('gameStart');
+                });
+            }
+        });
+    });
+
     socket.on('disconnect', () => {
         console.log('Un client s\'est déconnecté');
     });
@@ -81,6 +120,7 @@ const regles = require('./routes/regles.js');
 const parcourir = require('./routes/parcourir.js');
 const compte = require('./routes/compte.js');
 const dessin = require('./routes/dessin.js');
+const salon = require('./routes/salon.js')
 
 app.use(index);
 app.use(login);
@@ -91,6 +131,7 @@ app.use(regles);
 app.use(parcourir);
 app.use(compte);
 app.use(dessin);
+app.use(salon);
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
