@@ -20,13 +20,13 @@ html
 
         div.marginTop
             if (filtre==='jaime')
-                a.filter.active(href=`/compte/${username}?filtre=jaime`) J'aime
-                a.filter(href=`/compte/${username}?filtre=plus-recent`) Plus Récent
+                a.filter.active(href=`/compte/${profile}?filtre=jaime`) J'aime
+                a.filter(href=`/compte/${profile}?filtre=plus-recent`) Plus Récent
                 if username && username !== profile
                     a.filter(href=`/message/${nameProfile}`) Envoyer un message
             if (filtre==='plus-recent')
-                a.filter(href=`/compte/${username}?filtre=jaime`) J'aime
-                a.filter.active(href=`/compte/${username}?filtre=plus-recent`) Plus Récent
+                a.filter(href=`/compte/${profile}?filtre=jaime`) J'aime
+                a.filter.active(href=`/compte/${profile}?filtre=plus-recent`) Plus Récent
                 if username && username !== profile
                     a.filter(href=`/message/${nameProfile}`) Envoyer un message
 
