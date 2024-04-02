@@ -12,6 +12,7 @@ body {
   font-family: nimbus, sans-serif;
   margin: 0;
   padding: 0;
+    overflow-x: hidden;
 }
 
 .navbar {
@@ -83,7 +84,7 @@ body {
     top: 0;
     background-color: #82D9F8;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
 }
 
 .title {
@@ -125,6 +126,11 @@ body {
     margin: 20px;
     width: 30vw;
     height: auto;
+}
+
+.containerContainer {
+    width: 100vw;
+    overflow: hidden;
 }
 
 .dessin-container {

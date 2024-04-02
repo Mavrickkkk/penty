@@ -31,39 +31,70 @@ router.get('/salon', requireLogin, (req, res) => {
             res.status(500).send('Erreur serveur');
             return;
         }
-        // Rendu de la page avec les données récupérées
-        res.render('salon', { parties: rows });
+        connection.query('SELECT name FROM utilisateur WHERE username = ?', [req.session.username], (err, rows2) => {
+            if (err) {
+                console.error('Erreur lors de la récupération du nom associé à l\'username :', err);
+                res.status(500).send('Erreur serveur');
+                return;
+            }
+
+            // Si l'username existe dans la base de données, mettre à jour la variable name
+            if (rows2.length > 0) {
+                name = rows2[0].name;
+            }
+            res.render('salon', {parties: rows, username: req.session.username, name: name });
+        });
     });
 });
 
-// Route pour créer une nouvelle partie
 router.post('/creer', (req, res) => {
-    const randomWord1 = "Tapis";
-    const randomWord2 = "Souris";
     const joueur1 = req.session.username;
     let code = req.body.code; // Si mdp est null, la partie est publique
 
-    if (!code)
-        code= null;
-    // Requête d'insertion SQL
-    let sqlQuery = 'INSERT INTO partie (randomWord1, randomWord2, joueur1, mdp) VALUES (?, ?, ?, ?)';
-    let sqlParams = [randomWord1, randomWord2, joueur1, code];
-
-    // Exécution de la requête SQL
-    connection.query(sqlQuery, sqlParams, (err, result) => {
+    connection.query('SELECT mot FROM mot ORDER BY RAND() LIMIT 2', (err, rowsWord) => {
         if (err) {
-            console.error('Erreur lors de l\'insertion de la partie:', err);
+            console.error('Erreur lors de la récupération du mot aléatoire:', err);
             res.status(500).send('Erreur serveur');
             return;
         }
-        console.log('Nouvelle partie insérée avec succès');
-        res.redirect('/jeu'); // Redirigez l'utilisateur vers la page du salon
+
+        let randomWord1 = rowsWord[0].mot;
+        let randomWord2 = rowsWord[1].mot;
+
+        // Vérifier si les deux mots sont les mêmes et sélectionner un nouveau randomWord2 si c'est le cas
+        while (randomWord1 === randomWord2) {
+            connection.query('SELECT mot FROM mot ORDER BY RAND() LIMIT 1', (err, rowsWord) => {
+                if (err) {
+                    console.error('Erreur lors de la récupération du mot aléatoire:', err);
+                    res.status(500).send('Erreur serveur');
+                    return;
+                }
+                randomWord2 = rowsWord[0].mot;
+            });
+        }
+
+        if (!code)
+            code= null;
+        let sqlQuery = 'INSERT INTO partie SET randomWord1 = ?, randomWord2 = ?, joueur1 = ?, mdp = ?';
+        let sqlParams = [randomWord1, randomWord2, joueur1, code];
+
+        // Exécution de la requête SQL
+        connection.query(sqlQuery, sqlParams, (err, result) => {
+            if (err) {
+                console.error('Erreur lors de l\'insertion de la partie:', err);
+                res.status(500).send('Erreur serveur');
+                return;
+            }
+            console.log('Nouvelle partie insérée avec succès');
+            const partieId = result.insertId; // Récupérer l'ID de la partie nouvellement créée
+            res.redirect(`/jeu/${partieId}`); // Rediriger vers la page de jeu correspondante
+        });
     });
 });
 
-router.post('/rejoindre', (req, res) => {
+router.get('/rejoindre/:partieId', (req, res) => {
     const joueur = req.session.username;
-    const partieId = req.body.partieId;
+    const partieId = req.params.partieId;
 
     // Vérifie que la partie existe et qu'elle n'a qu'un seul joueur
     connection.query('SELECT * FROM partie WHERE id = ? AND joueur2 IS NULL', [partieId], (err, result) => {
@@ -84,9 +115,10 @@ router.post('/rejoindre', (req, res) => {
                 return;
             }
             console.log(`Le joueur ${joueur} a rejoint la partie ${partieId}`);
-            res.redirect('/jeu');
+            res.redirect(`/jeu/${partieId}`);
         });
     });
 });
+
 
 module.exports = router;

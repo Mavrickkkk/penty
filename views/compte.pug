@@ -22,11 +22,15 @@ html
             if (filtre==='jaime')
                 a.filter.active(href=`/compte/${username}?filtre=jaime`) J'aime
                 a.filter(href=`/compte/${username}?filtre=plus-recent`) Plus Récent
+                if username && username !== profile
+                    a.filter(href=`/message/${nameProfile}`) Envoyer un message
             if (filtre==='plus-recent')
                 a.filter(href=`/compte/${username}?filtre=jaime`) J'aime
                 a.filter.active(href=`/compte/${username}?filtre=plus-recent`) Plus Récent
+                if username && username !== profile
+                    a.filter(href=`/message/${nameProfile}`) Envoyer un message
 
         div.dessin-container.center
             each dessin in dessins
-                a(href="/dessin/2")
+                a(href=`/dessin/${dessin.id}`)
                     img.image-class(src=`/dessin/${dessin.picPath}`, alt='Image du dessin')

@@ -5,7 +5,9 @@ html
         link(rel='stylesheet', href='/style/styleJeu.css')
         link(rel='icon', href='/images/favicon.png', type='image/x-icon')
         script(src="https://code.jquery.com/jquery-3.6.0.min.js")
-        script(src='/js/scriptJeu.js')
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+        //script(src='/js/scriptJeu.js')
+
     body
         .logo-container
             img.logo(src='/images/logo.png')
@@ -31,7 +33,178 @@ html
                     button(style='background-color: #FFFF00;')
                     button#eraserButton(style='background-color: #FFFFFF;')
                 #sizeControl
-                    input#brushSize(type='range', min='1', max='20', value='5')
+                    input#brushSize(type='range', min='15', max='50', value='20')
 
         .bottom
-            a.quitter(href="/") quitter
+            a.quitter#sendDrawingButton Envoyer
+        script.
+            document.addEventListener('DOMContentLoaded', () => {
+                const canvas = document.getElementById('canvas');
+                const context = canvas.getContext('2d');
+                let drawing = false;
+                let currentColor = 'black';
+                let currentSize = 5; // Taille du crayon par défaut
+                let timerValue = 180; // Valeur initiale du timer en secondes
+                let countdownInterval; // Variable pour stocker l'intervalle de compte à rebours
+
+                const colorPalette = document.getElementById('colorPalette');
+                colorPalette.addEventListener('click', (event) => {
+                    if (event.target.style.backgroundColor) {
+                        currentColor = event.target.style.backgroundColor;
+                    }
+                });
+
+                const eraserButton = document.getElementById('eraserButton');
+                eraserButton.addEventListener('click', () => {
+                    currentColor = 'white';
+                });
+
+                const brushSizeInput = document.getElementById('brushSize');
+                brushSizeInput.addEventListener('input', () => {
+                    currentSize = parseInt(brushSizeInput.value, 10);
+                });
+
+                // Initialisation de la valeur par défaut du bouton de taille de pinceau
+                brushSizeInput.value = currentSize;
+
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mousemove', draw);
+
+                // Variable pour stocker le délai d'envoi de l'image
+                let sendDelay;
+
+                // Fonction pour démarrer le délai d'envoi de l'image
+                function startSendDelay() {
+                    sendDelay = setTimeout(() => {
+                        sendDrawing();
+                    }, 20000); // Envoyer l'image après 20 secondes
+                }
+
+                // Fonction pour arrêter le délai d'envoi de l'image
+                function stopSendDelay() {
+                    clearTimeout(sendDelay);
+                }
+
+                // Fonction pour démarrer le dessin
+                function startDrawing(e) {
+                    if (timerValue > 0 || e.buttons !== 1) {
+                        drawing = true;
+                        draw(e);
+                    }
+                }
+
+                // Fonction pour arrêter le dessin
+                function stopDrawing() {
+                    drawing = false;
+                    stopSendDelay(); // Arrêter le délai d'envoi de l'image actuel
+                    context.beginPath();
+                }
+
+                // Fonction pour dessiner
+                function draw(e) {
+                    if (!drawing) return;
+
+                    const rect = canvas.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+
+                    context.lineWidth = currentSize;
+                    context.lineCap = 'round';
+                    context.strokeStyle = currentColor;
+
+                    context.lineTo(mouseX, mouseY);
+                    context.stroke();
+                    context.beginPath();
+                    context.moveTo(mouseX, mouseY);
+                }
+
+                // Fonction pour démarrer le timer
+                function startTimer() {
+                    countdownInterval = setInterval(() => {
+                        timerValue--;
+                        if (timerValue <= 0) {
+                            stopTimer();
+                        }
+                        updateTimerDisplay();
+                    }, 1000);
+                }
+
+                // Fonction pour arrêter le timer
+                function stopTimer() {
+                    clearInterval(countdownInterval);
+                }
+
+                // Fonction pour envoyer le dessin au serveur
+                async function sendDrawing() {
+                    const canvas = document.getElementById('canvas');
+                    let blob = await fetch(canvas.toDataURL('image/png')).then(r => r.blob());
+                    let file = new File([blob], 'image.png', {type: 'image/png'});
+                    const formData = new FormData();
+                    formData.append('image', file); // Ajouter les données de l'image au FormData
+
+                    const partieId = location.pathname.split('/')[2];
+                    // Envoyer une requête AJAX au serveur
+                    $.ajax({
+                        type: 'POST',
+                        url: `/dessinEnvoie/${partieId}`,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            // Rediriger l'utilisateur vers une autre page
+                            window.location.href = '/';
+                        },
+                        error: function (error) {
+                            console.error('Erreur lors de l\'envoi du dessin :', error);
+                        },
+                    });
+                }
+
+                // Fonction pour mettre à jour l'affichage du timer
+                function updateTimerDisplay() {
+                    const countdownElement = document.getElementById('countdown');
+                    countdownElement.textContent = timerValue; // Mettre à jour l'affichage du timer
+
+                    // Vérifier si le temps est écoulé
+                    if (timerValue === 0) {
+                        clearInterval(countdownInterval);
+                        stopSendDelay(); // Arrêter le délai d'envoi de l'image actuel
+                        sendDrawing(); // Appeler la fonction sendDrawing() lorsque le temps est écoulé
+                    }
+                }
+
+                function checkPlayer2() {
+                    const partieId = location.pathname.split('/')[2];
+                    $.ajax({
+                        type: 'GET',
+                        url: `/jeu/${partieId}/checkPlayer2`,
+                        success: function (response) {
+                            if (response.player2) {
+                                startTimer();
+                                startSendDelay();
+                            } else {
+                                setTimeout(checkPlayer2, 5000); // Vérifier à nouveau dans 5 secondes
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Erreur lors de la vérification du joueur 2 :', error);
+                            setTimeout(checkPlayer2, 5000); // Vérifier à nouveau dans 5 secondes
+                        },
+                    });
+                }
+
+
+                const sendDrawingButton = document.getElementById('sendDrawingButton');
+                sendDrawingButton.addEventListener('click', () => {
+                    sendDrawing();
+                });
+
+                checkPlayer2();
+
+                /*socket.on('gameStart', () => {
+                    console.log('j ai bien reçu');
+                    startTimer();
+                    startSendDelay();
+                });*/
+            });

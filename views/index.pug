@@ -57,12 +57,13 @@ html
     div.homepic-div
       img.homepic-class(src="/images/homepic.png", alt="image d'accueil")
 
-    a.mainText Le meilleur de Penty.
-    a.subText selon vous
+    a.mainText C'est tout neuf sur Penty.
+    a.subText par vous
 
-    div.dessin-container
-      each dessin in dessins
-        img.image-class.animated-drawing(src=`/dessin/${dessin.picPath}`, alt='Image du dessin')
+    div.containerContainer
+      div.dessin-container
+        each dessin in dessins
+          img.image-class.animated-drawing(src=`/dessin/${dessin.picPath}`, alt='Image du dessin')
 
     div.center
       a.buttonBW(href="/parcourir") voir plus

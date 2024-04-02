@@ -34,6 +34,7 @@ body {
     color: white;
     font-size: 200%;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .logo-container {

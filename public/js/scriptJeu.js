@@ -134,7 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Démarrer le timer et le délai d'envoi de l'image lorsque le DOM est chargé
-    startTimer();
-    startSendDelay();
+    const socket = io();
+
+    socket.on('gameStart', () => {
+        console.log('j ai bien reçu');
+        startTimer();
+        startSendDelay();
+    });
+
 });

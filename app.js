@@ -7,11 +7,40 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const connection = require('./database.js');
 
+
+const gameStartHandler = (socket) => {
+    console.log('Un client a rejoint la partie');
+    socket.emit('gameStart'); // émettre l'événement sur socket plutôt que sur io
+};
+
+const joinGameHandler = (socket, gameId, playerId) => {
+    // Vérifier s'il existe déjà une entrée dans la table des parties en cours pour cette partie
+    const sql = 'SELECT * FROM partie WHERE id = ?';
+    console.log("je suis bien dans joingame");
+    connection.query(sql, [gameId], (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la vérification de la partie en cours :', err);
+            return;
+        }
+        // Une entrée trouvée, mettre à jour l'entrée avec le joueur actuel en tant que joueur 2
+        const sql = 'UPDATE partie SET joueur2 = ? WHERE id = ?';
+        connection.query(sql, [playerId, gameId], (err, result3) => {
+            if (err) {
+                console.error('Erreur lors de la mise à jour de la partie en cours :', err);
+                return;
+            }
+            console.log('Partie en cours mise à jour avec succès.');
+            socket.emit('gameStart');
+        });
+    });
+};
+
+
 io.on('connection', (socket) => {
     console.log('Un client est connecté');
 
-    // Émettre un événement 'welcome' vers le client qui s'est connecté
     socket.emit('welcome', 'Bienvenue sur le serveur Socket.io');
+    //socket.emit('gameStart');
 
     socket.on('newUser', (username) => {
         console.log('Nouvel utilisateur :', username);
@@ -45,45 +74,38 @@ io.on('connection', (socket) => {
             });
         });
     });
-
     socket.on('joinGame', (gameId, playerId) => {
+        joinGameHandler(socket, gameId, playerId);
+    });
+
+    /*socket.on('joinGame', (gameId, playerId) => {
         // Vérifier s'il existe déjà une entrée dans la table des parties en cours pour cette partie
         const sql = 'SELECT * FROM partie WHERE id = ?';
+        console.log("je suis bien dans joingame");
         connection.query(sql, [gameId], (err, result) => {
             if (err) {
                 console.error('Erreur lors de la vérification de la partie en cours :', err);
                 return;
             }
+            // Une entrée trouvée, mettre à jour l'entrée avec le joueur actuel en tant que joueur 2
+            const sql = 'UPDATE partie SET joueur2 = ? WHERE id = ?';
+            connection.query(sql, [playerId, gameId], (err, result3) => {
+                if (err) {
+                    console.error('Erreur lors de la mise à jour de la partie en cours :', err);
+                    return;
+                }
+                console.log('Partie en cours mise à jour avec succès.');
 
-            if (result.length === 0) {
-                // Aucune entrée trouvée, créer une nouvelle entrée avec le joueur actuel en tant que joueur 1
-                const sql = 'INSERT INTO partie (id, joueur1) VALUES (?, ?)';
-                connection.query(sql, [gameId, playerId], (err, result) => {
-                    if (err) {
-                        console.error('Erreur lors de la création de la partie en cours :', err);
-                        return;
-                    }
-                    console.log('Partie en cours créée avec succès.');
-                });
-            } else {
-                // Une entrée trouvée, mettre à jour l'entrée avec le joueur actuel en tant que joueur 2
-                const sql = 'UPDATE partie SET joueur2 = ? WHERE id = ?';
-                connection.query(sql, [playerId, gameId], (err, result) => {
-                    if (err) {
-                        console.error('Erreur lors de la mise à jour de la partie en cours :', err);
-                        return;
-                    }
-                    console.log('Partie en cours mise à jour avec succès.');
-
-                    // Émettre un événement 'gameStart' vers les deux joueurs pour démarrer la partie
-                    const player1Socket = io.sockets.sockets.get(result[0].joueur_1);
-                    const player2Socket = io.sockets.sockets.get(playerId);
-                    player1Socket.emit('gameStart');
-                    player2Socket.emit('gameStart');
-                });
-            }
+                io.emit('gameStart');
+                console.log(result[0].joueur1);
+                // Émettre un événement 'gameStart' vers les deux joueurs pour démarrer la partie
+                const player1Socket = io.sockets.sockets.get(result[0].joueur1);
+                const player2Socket = io.sockets.sockets.get(playerId);
+                player1Socket.emit('gameStart');
+                player2Socket.emit('gameStart');
+            });
         });
-    });
+    });*/
 
     socket.on('disconnect', () => {
         console.log('Un client s\'est déconnecté');

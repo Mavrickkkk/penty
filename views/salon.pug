@@ -13,45 +13,55 @@ html
         createButton.addEventListener('click', function () {
           createForm.style.display = 'block';
           });
+
+        const username = 'mavrick';
+
+
+          // ajouter le code suivant pour émettre un événement socket
+          const socket = io();
+        // Ajouter un écouteur d'événement sur le bouton "Rejoindre"
+        const joinButton = document.getElementById('join-button');
+        joinButton.addEventListener('click', function () {
+          const partieId = joinButton.dataset.id;
+          socket.emit('gameStart');
+          socket.emit('joinGame', partieId, username);
+          window.location.href = `/rejoindre/${partieId}`;
+        });
       });
+
   body
+    nav.navbar
+      div.left
+        a.buttonBW(href = '/') Menu
+      div.center
+        a.title Penty.
+      div.right
+        if username
+          a.buttonBW(href=`/compte/${username}`) #{name}
+        else
+          a.blackText(href = '/login') Se connecter
+          a.buttonBW(href = '/register') S'inscrire
     div.header
       a.party-button#create-button Créer une partie
-      div#create-form(style='display: none;') 
+      div#create-form(style='display: none;')
         form(action='/creer', method='POST')
+          label.subtext.marginRight(for='code') Code :
+          input.moteur(type='number', name='code', id='code')
+          input.submit.marginLeft(type='submit', value='Créer')
 
-
-          label(for='code') Code :
-          input(type='number', name='code', id='code')
-          input(type='submit', value='Créer')
-
-      div.logo-container
-        img.logo(src='images/logo.png')
-
-    .main-container 
+    div.center
+      img.pic(src="/images/home.png")
+    .main-container
 
       form(action='/salon', method='GET')
         input.moteur(type='text', name='query', placeholder='Rechercher...')
-
       div.parties-container
         each p in parties
           .party
             p
-              span Joueur: #{p.joueur1}
-              form(action='/rejoindre', method='POST')
-                input(type='hidden', name='partieId', value=p.id)
-                if p.mdp
-                  span privée
-                else
-                  span public
-                button(type='submit') Rejoindre
-                // ajouter le code suivant pour émettre un événement socket
-                script.
-                  const io = require('socket.io-client');
-                  const socket = io();
-                  const joinButton = document.querySelector('button[type="submit"]');
-                  joinButton.addEventListener('click', function (event) {
-                    event.preventDefault(); // empêcher le formulaire d'être soumis
-                    const partieId = document.querySelector('input[name="partieId"]').value;
-                    socket.emit('join-party', {partieId: partieId});
-                  });
+              span.text #{p.joueur1}
+              button.buttonBlue.marginLeft#join-button(data-id=p.id) Rejoindre
+              if p.mdp
+                span.marginLeft.subtext privée
+              else
+                span.marginLeft.subtext publique

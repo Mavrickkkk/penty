@@ -1,6 +1,95 @@
+@font-face {
+    font-family: "nimbus";
+    src: url(../font/nimbus.otf);
+}
+@font-face {
+    font-family: "nohemiEL";
+    src: url(../font/nohemiel.ttf);
+}
+
+a{
+    font-family: nimbus, sans-serif;
+    color: black;
+    text-decoration: none;
+
+}
+
 body {
+    font-family: nimbus, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     top: 0;
-    left: 0;
+    z-index: 100;
+}
+
+.buttonBlue {
+    background-color: #1C66F9;
+    padding: 5px 25px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 130%;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.buttonBlue:hover {
+    background-color: white;
+    color: #1C66F9;
+    border: 1px solid #1C66F9;
+}
+
+.blackText {
+    font-family: nimbus, sans-serif;
+    text-decoration: none;
+    color: black;
+    font-size: 130%;
+    margin-right: 10px;
+}
+
+.buttonBW {
+    background-color: #0F0F0F;
+    padding: 5px 30px;
+    font-family: nimbus, sans-serif;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    font-size: 130%;
+    margin: 70px 0px;
+}
+
+.buttonBW:hover {
+    background-color: #464646;
+}
+
+.topCentered {
+    display: flex;
+    justify-content: center;
+}
+
+.title {
+    font-family: nimbus, sans-serif;
+    font-size: 250%;
+}
+
+.marginTop {
+    margin-top: 75px;
+}
+
+.marginLeft {
+    margin-left: 30px;
+}
+
+.marginRight {
+    margin-right: 10px;
 }
 
 .header {
@@ -8,32 +97,21 @@ body {
     padding: 20px;
 }
 
-.logo-container {
-    display: flex;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
-
-.logo {
-    width: 150px;
-    height: auto;
-}
-
-.cadenas {
-    width: 40px;
-    height: auto;
-}
-
 .party-button {
     text-decoration: none;
     background-color: #82D9F8;
+    border-radius: 25px;
     color: white;
-    padding: 5px 10px;
+    padding: 10px 20px;
     border: none;
     font-family: nimbus, sans-serif;
-    font-size: 130%;
+    font-size: 200%;
     box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.party-button:hover {
+    background-color: #74c8e3;
 }
 
 .main-container {
@@ -41,21 +119,60 @@ body {
     padding: 20px;
 }
 
+#create-form {
+    margin-top: 30px;
+}
+
+.center {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.pic {
+    width: 90vw;
+    border-radius: 50px;
+    margin: 20px 0px;
+}
+
+.text {
+    font-size: 200%;
+    font-family: nimbus, sans-serif;
+}
+
+.subtext {
+    font-size: 130%;
+    font-family: nohemiEL, sans-serif;
+}
+
 .moteur {
     border: none;
     color: #3b3b3b;
-    border-radius: 8px;
+    border-radius: 25px;
     font-size: 130%;
     font-family: nimbus, sans-serif;
-    width: 30vw;
+    padding: 10px 20px;
     text-align: center;
     outline: none;
-    display: block;
     box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.2);
     margin: 0 auto;
     /* Ajoutez cette ligne pour centrer horizontalement */
 }
 
+.submit {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-color: #82D9F8;
+    border: none;
+    color: white;
+    font-size: 130%;
+    font-family: nohemiEL, sans-serif;
+}
+
+.submit:hover {
+    background-color: #74c8e3;
+}
 
 .parties-container {
     display: flex;
